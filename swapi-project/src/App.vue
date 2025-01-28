@@ -46,21 +46,40 @@ export default defineComponent({
 body {
   background-image: url(@/img/coruscant-star-wars-skyscraper.jpg);
   background-attachment: fixed;
+  background-position: center;
   background-size: cover;
 }
 .container {
-  border-left: 5px solid rgba(0, 0, 0, 0.9);
-  border-right: 5px solid rgba(0, 0, 0, 0.9);
   background-color: rgba(0, 0, 0, 0.8);
   margin: 0 auto;
-  width: 68.75%;
+  min-width: 343px;
+  width: 91.5%;
+}
+@media only screen and (min-width: 775px) {
+  .container {
+    min-width: 775px;
+    width: 92.8%;
+  }
+}
+@media only screen and (min-width: 1320px) {
+  .container {
+    min-width: 1320px;
+    width: 68.75%;
+  }
 }
 .header {
 }
 .header img {
-  width: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  min-height: 150px;
+}
+@media only screen and (min-width: 775px) {
+  .header img {
+    width: 100%;
+  }
 }
 .content {
-  height: 100vh;
+  min-height: 100vh;
 }
 </style>

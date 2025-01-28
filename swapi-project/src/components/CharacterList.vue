@@ -82,9 +82,14 @@ function toPrevPage() {
 </script>
 <style scoped>
 .content__header {
-  padding-top: 48px;
+  padding-top: 24px;
   text-align: center;
   color: rgb(245, 229, 30);
+}
+@media only screen and (min-width: 775px) {
+  .content__header {
+    padding-top: 48px;
+  }
 }
 .error {
   padding-top: 24px;
