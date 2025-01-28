@@ -45,11 +45,8 @@ export default defineComponent({
 }
 body {
   background-image: url(@/img/coruscant-star-wars-skyscraper.jpg);
-  background-size: auto 100%;
-  background-position: center;
-  height: 100vh;
-  /* чтобы не было полосы прокрутки */
-  overflow: hidden;
+  background-attachment: fixed;
+  background-size: cover;
 }
 .container {
   border-left: 5px solid rgba(0, 0, 0, 0.9);
