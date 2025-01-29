@@ -3,17 +3,9 @@
     <header class="header">
       <img src="./img/star-wars-logo-cropped.jpg" alt="" />
     </header>
-    <!-- <div class="search_bar">
-      <input
-        type="search"
-        name=""
-        id=""
-        placeholder="Enter character name..."
-      />
-    </div> -->
-    <div class="content">
+    <section class="content">
       <CharacterList></CharacterList>
-    </div>
+    </section>
   </div>
 </template>
 
