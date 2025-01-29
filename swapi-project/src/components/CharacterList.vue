@@ -20,7 +20,13 @@
   <div class="search_results" v-if="!errorMessage">
     <ul class="search_results__list">
       <li v-for="item in characters" :key="item.name">
-        <a class="search_results__item" :href="item.url" target="_blank">
+        <a
+          class="search_results__item"
+          :data-birth-year="item.birth_year"
+          :data-gender="item.gender"
+          :href="item.url"
+          target="_blank"
+        >
           {{ item.name }}
         </a>
       </li>
@@ -159,6 +165,7 @@ async function toPrevPage() {
   gap: 16px;
 }
 .search_results__item {
+  position: relative;
   padding: 8px 16px;
   text-decoration: none;
   color: #fff;
@@ -167,6 +174,19 @@ async function toPrevPage() {
 .search_results__item:hover {
   background-color: rgb(245, 229, 30);
   color: black;
+}
+.search_results__item::after {
+  white-space: nowrap;
+  content: "birth year: " attr(data-birth-year) ", gender: " attr(data-gender);
+  position: absolute;
+  left: 100%;
+  margin-left: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: gray;
+}
+.search_results__item:hover::after {
+  opacity: 1;
 }
 .search_results__pagination {
   padding-top: 28px;
@@ -188,5 +208,6 @@ async function toPrevPage() {
   cursor: not-allowed;
 }
 .search_results__empty {
+  text-align: center;
 }
 </style>
