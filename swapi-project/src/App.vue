@@ -3,22 +3,32 @@
     <header class="header">
       <img src="./img/star-wars-logo-cropped.jpg" alt="" />
     </header>
-    <section class="content">
-      <CharacterList></CharacterList>
-    </section>
+    <Transition>
+      <section class="content" v-show="!selectedCharacter">
+        <CharacterList v-bind:selectCharacter="selectCharacter"></CharacterList>
+      </section>
+    </Transition>
+
+    <Transition>
+      <div class="character" v-if="selectedCharacter">
+        <CharacterDetail
+          v-bind:selectCharacter="selectCharacter"
+          v-bind:selectedCharacter="selectedCharacter"
+        ></CharacterDetail></div
+    ></Transition>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import CharacterList from "./components/CharacterList.vue";
+import CharacterDetail from "./components/CharacterDetail.vue";
 
-export default defineComponent({
-  name: "App",
-  components: {
-    CharacterList,
-  },
-});
+const selectedCharacter = ref<any>(null);
+// эту функцию передаю детям
+function selectCharacter(character: any) {
+  selectedCharacter.value = character;
+}
 </script>
 
 <style>
@@ -74,4 +84,41 @@ body {
 .content {
   min-height: 100vh;
 }
+.character {
+  min-height: 100vh;
+  padding: 12px 24px;
+}
+@media only screen and (min-width: 1320px) {
+  .character {
+    padding: 24px 24px;
+  }
+}
+.error {
+  padding-top: 24px;
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+.loading {
+  padding-top: 24px;
+  text-align: center;
+}
+/* transition */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+/* transition group */
+/* .list-enter-active,
+.list-leave-active {
+  transition: opacity 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+} */
 </style>

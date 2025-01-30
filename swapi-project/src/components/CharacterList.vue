@@ -18,19 +18,22 @@
   </div>
 
   <div class="search_results" v-if="!errorMessage">
+    <div v-if="!isDataLoaded" class="loading">Loading...</div>
     <ul class="search_results__list">
+      <!-- <TransitionGroup name="list" tag="ul" class="search_results__list"> -->
       <li v-for="item in characters" :key="item.name">
-        <a
+        <button
           class="search_results__item"
           :data-birth-year="item.birth_year"
           :data-gender="item.gender"
-          :href="item.url"
-          target="_blank"
+          @click="props.selectCharacter(item)"
         >
           {{ item.name }}
-        </a>
+        </button>
       </li>
+      <!-- </TransitionGroup> -->
     </ul>
+
     <div class="search_results__pagination" v-if="characters.length > 0">
       <button
         v-bind:disabled="!prevPage"
@@ -59,6 +62,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
+// для получения функции от родителя
+import { defineProps } from "vue";
+const props = defineProps<{
+  selectCharacter: (character: any) => void;
+}>();
 
 // уточнить по поводу типа
 const characters = ref<any[]>([]);
@@ -106,7 +114,7 @@ async function toPrevPage() {
   }
 }
 </script>
-<!-- стили -->
+
 <style scoped>
 .content__header {
   padding-top: 24px;
@@ -148,12 +156,6 @@ async function toPrevPage() {
   border: 1px solid rgb(245, 229, 30);
   outline: 1px solid rgba(245, 231, 30, 0.6);
 }
-.error {
-  padding-top: 24px;
-  text-align: center;
-  color: red;
-  font-weight: bold;
-}
 .search_results {
 }
 .search_results__list {
@@ -162,31 +164,36 @@ async function toPrevPage() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 2px;
 }
 .search_results__item {
+  all: unset;
   position: relative;
-  padding: 8px 16px;
+  padding: 10px 16px 8px;
   text-decoration: none;
   color: #fff;
   border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 .search_results__item:hover {
   background-color: rgb(245, 229, 30);
   color: black;
 }
-.search_results__item::after {
-  white-space: nowrap;
-  content: "birth year: " attr(data-birth-year) ", gender: " attr(data-gender);
-  position: absolute;
-  left: 100%;
-  margin-left: 8px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  color: gray;
-}
-.search_results__item:hover::after {
-  opacity: 1;
+@media only screen and (min-width: 775px) {
+  .search_results__item::after {
+    white-space: nowrap;
+    content: "birth year: " attr(data-birth-year) ", gender: " attr(data-gender);
+    position: absolute;
+    left: 100%;
+    margin-left: 12px;
+    opacity: 0;
+    color: gray;
+    transition: opacity 0.5s ease;
+  }
+  .search_results__item:hover::after {
+    opacity: 1;
+  }
 }
 .search_results__pagination {
   padding-top: 28px;
