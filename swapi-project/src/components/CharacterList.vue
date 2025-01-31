@@ -119,7 +119,7 @@ async function toPrevPage() {
 .content__header {
   padding-top: 24px;
   text-align: center;
-  color: rgb(245, 229, 30);
+  color: var(--color-yellow);
 }
 @media only screen and (min-width: 775px) {
   .content__header {
@@ -134,7 +134,7 @@ async function toPrevPage() {
   gap: 16px;
 }
 .search_bar__header {
-  color: rgb(245, 229, 30);
+  color: var(--color-yellow);
 }
 .search_bar__input {
   width: 300px;
@@ -142,19 +142,19 @@ async function toPrevPage() {
   background-color: inherit;
   padding-left: 15px;
   padding-right: 15px;
-  border: 1px solid #fff;
+  border: 1px solid var(--color-white);
   outline: none;
   border-radius: 20px;
-  color: #fff;
+  color: var(--color-white);
 }
 .search_bar__input:focus {
-  border: 1px solid rgb(245, 229, 30);
-  outline: 1px solid rgba(245, 231, 30, 0.6);
-  color: #fff;
+  border: 1px solid var(--color-yellow);
+  outline: 1px solid rgba(245, 229, 30, 0.6); /* --color-yellow */
+  color: var(--color-white);
 }
 .search_bar__input:focus-visible {
-  border: 1px solid rgb(245, 229, 30);
-  outline: 1px solid rgba(245, 231, 30, 0.6);
+  border: 1px solid var(--color-yellow);
+  outline: 1px solid rgba(245, 229, 30, 0.6); /* --color-yellow */
 }
 .search_results {
 }
@@ -171,14 +171,14 @@ async function toPrevPage() {
   position: relative;
   padding: 10px 16px 8px;
   text-decoration: none;
-  color: #fff;
+  color: var(--color-white);
   border-radius: 16px;
   cursor: pointer;
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 .search_results__item:hover {
-  background-color: rgb(245, 229, 30);
-  color: black;
+  background-color: var(--color-yellow);
+  color: var(--color-black);
 }
 @media only screen and (min-width: 775px) {
   .search_results__item::after {
@@ -188,7 +188,8 @@ async function toPrevPage() {
     left: 100%;
     margin-left: 12px;
     opacity: 0;
-    color: gray;
+    color: var(--color-light-gray);
+    font-size: 14px;
     transition: opacity 0.5s ease;
   }
   .search_results__item:hover::after {
@@ -203,15 +204,15 @@ async function toPrevPage() {
 .pagination__button {
   width: 130px;
   height: 45px;
-  border: 2px solid black;
   border-radius: 20px;
-  background-color: rgb(245, 229, 30);
-  color: black;
+  background-color: var(--color-yellow);
+  border: 1px solid var(--color-yellow);
+  color: var(--color-black);
   text-align: center;
   cursor: pointer;
 }
 .pagination__button:disabled {
-  background-color: rgba(245, 231, 30, 0.8);
+  background-color: rgba(245, 229, 30, 0.8); /* --color-yellow */
   cursor: not-allowed;
 }
 .search_results__empty {

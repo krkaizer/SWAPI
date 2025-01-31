@@ -96,7 +96,7 @@ onMounted(() => {
 .character_info__homeworld {
   text-align: center;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-light-gray);
   margin-bottom: 12px;
 }
 @media only screen and (min-width: 775px) {
@@ -105,9 +105,9 @@ onMounted(() => {
   }
 }
 .info__general {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3); /* --color-black */
   padding: 12px;
-  border: 1px solid #fff;
+  border: 1px solid var(--color-white);
   border-radius: 12px;
 }
 @media only screen and (min-width: 775px) {

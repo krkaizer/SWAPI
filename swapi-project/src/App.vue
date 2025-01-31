@@ -3,11 +3,11 @@
     <header class="header">
       <img src="./img/star-wars-logo-cropped.jpg" alt="" />
     </header>
-    <Transition>
-      <section class="content" v-show="!selectedCharacter">
-        <CharacterList v-bind:selectCharacter="selectCharacter"></CharacterList>
-      </section>
-    </Transition>
+    <!-- <Transition> -->
+    <section class="content" v-show="!selectedCharacter">
+      <CharacterList v-bind:selectCharacter="selectCharacter"></CharacterList>
+    </section>
+    <!-- </Transition> -->
 
     <Transition>
       <div class="character" v-if="selectedCharacter">
@@ -32,18 +32,43 @@ function selectCharacter(character: any) {
 </script>
 
 <style>
+:root {
+  --font-heading: "Orbitron", serif;
+  --font-base: "Exo", serif;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-yellow: #f5e51e;
+  --color-gray: #7f7f7f;
+  --color-light-gray: #b4b4b4;
+  /* --color-dark-gray: #5d5d62; */
+}
+html {
+  font-size: 16px;
+  font-family: var(--font-base);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+button {
+  font-family: inherit;
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
-  color: #ffffff;
-  /* margin-top: 60px; */
+  color: var(--color-white);
+  font-family: var(--font-base);
 }
 body {
   background-image: url(@/img/coruscant-star-wars-skyscraper.jpg);
@@ -52,7 +77,7 @@ body {
   background-size: cover;
 }
 .container {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.8); /* --color-black */
   margin: 0 auto;
   min-width: 343px;
   width: 91.5%;
@@ -102,6 +127,7 @@ body {
 .loading {
   padding-top: 24px;
   text-align: center;
+  color: var(--color-light-gray);
 }
 /* transition */
 .v-enter-active,
