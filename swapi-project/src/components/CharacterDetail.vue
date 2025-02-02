@@ -23,17 +23,32 @@
   </div>
   <div v-if="!isDataLoaded" class="loading">Loading...</div>
   <div v-if="isDataLoaded" class="character_info">
-    <h4 class="character_info__item character_info__homeworld">
+    <h4
+      v-if="characterHomeworld !== 'unknown'"
+      class="character_info__item character_info__homeworld"
+    >
       from {{ characterHomeworld }}
     </h4>
+    <h4 v-else class="character_info__item character_info__homeworld">
+      homeworld is unknown
+    </h4>
+
     <div class="info__general">
       <p class="character_info__item">
         Birth year:
         {{ character.birth_year }}
       </p>
       <p class="character_info__item">Gender: {{ character.gender }}</p>
-      <p class="character_info__item">Mass: {{ character.mass }} kg</p>
-      <p class="character_info__item">Height: {{ character.height }} cm</p>
+
+      <p v-if="character.mass !== 'unknown'" class="character_info__item">
+        Mass: {{ character.mass }} kg
+      </p>
+      <p v-else class="character_info__item">Mass: {{ character.mass }}</p>
+
+      <p v-if="character.height !== 'unknown'" class="character_info__item">
+        Height: {{ character.height }} cm
+      </p>
+      <p v-else class="character_info__item">Height: {{ character.height }}</p>
     </div>
   </div>
 </template>
@@ -44,13 +59,13 @@ import { defineProps } from "vue";
 import axios from "axios";
 
 const props = defineProps<{
-  selectCharacter: (character: any) => void;
-  selectedCharacter: any;
+  selectCharacter: (character: any[] | null) => void;
+  selectedCharacter: any[] | null;
 }>();
 const character = ref<any>(props.selectedCharacter);
 const characterHomeworld = ref<string>("");
 const errorMessage = ref<string>("");
-const isDataLoaded = ref(false);
+const isDataLoaded = ref<boolean>(false);
 
 async function getHomeworld() {
   try {

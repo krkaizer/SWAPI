@@ -24,9 +24,9 @@ import { ref } from "vue";
 import CharacterList from "./components/CharacterList.vue";
 import CharacterDetail from "./components/CharacterDetail.vue";
 
-const selectedCharacter = ref<any>(null);
+const selectedCharacter = ref<any[] | null>(null);
 // эту функцию передаю детям
-function selectCharacter(character: any) {
+function selectCharacter(character: any[] | null) {
   selectedCharacter.value = character;
 }
 </script>
@@ -130,21 +130,25 @@ body {
   color: var(--color-light-gray);
 }
 /* transition */
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
 }
-/* transition group */
-/* .list-enter-active,
-.list-leave-active {
+.v-enter-active,
+.v-leave-active {
   transition: opacity 0.5s ease;
 }
+/* transition group */
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-} */
+}
+.list-enter-active,
+.list-leave-active {
+  transition: opacity 0.7s ease;
+}
+.list-leave-active {
+  /* чтобы элементы списка убирались сразу и не было скачка */
+  display: none;
+}
 </style>

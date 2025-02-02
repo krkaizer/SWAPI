@@ -19,8 +19,8 @@
 
   <div class="search_results" v-if="!errorMessage">
     <div v-if="!isDataLoaded" class="loading">Loading...</div>
-    <ul class="search_results__list">
-      <!-- <TransitionGroup name="list" tag="ul" class="search_results__list"> -->
+    <!-- <ul class="search_results__list"> -->
+    <TransitionGroup tag="ul" class="search_results__list" name="list">
       <li v-for="item in characters" :key="item.name">
         <button
           class="search_results__item"
@@ -31,8 +31,8 @@
           {{ item.name }}
         </button>
       </li>
-      <!-- </TransitionGroup> -->
-    </ul>
+    </TransitionGroup>
+    <!-- </ul> -->
 
     <div class="search_results__pagination" v-if="characters.length > 0">
       <button
@@ -65,20 +65,23 @@ import axios from "axios";
 // для получения функции от родителя
 import { defineProps } from "vue";
 const props = defineProps<{
-  selectCharacter: (character: any) => void;
+  selectCharacter: (character: any[] | null) => void;
 }>();
 
 // уточнить по поводу типа
 const characters = ref<any[]>([]);
-const searchQuery = ref(""); //поисковой запрос
+const searchQuery = ref<string>(""); //поисковой запрос
 const nextPage = ref<string | null>(null);
 const prevPage = ref<string | null>(null);
 const errorMessage = ref<string>("");
-const isDataLoaded = ref(false); //проверка загружены ли данные
+const isDataLoaded = ref<boolean>(false); //проверка загружены ли данные
 
 // null может быть при передаче ссылки на несуществующую next или prev
 async function getCharacters(url: string | null = null) {
   errorMessage.value = "";
+  isDataLoaded.value = false;
+  // очищаем предыдущий запрос
+  characters.value = [];
   try {
     // без await вернёт промис
     const response = await axios.get(
@@ -87,13 +90,14 @@ async function getCharacters(url: string | null = null) {
     nextPage.value = response.data.next;
     prevPage.value = response.data.previous;
     characters.value = response.data.results;
+    isDataLoaded.value = true;
+    if (characters.value.length) {
+      console.log("All characters are loaded.");
+    }
   } catch (error: any) {
+    isDataLoaded.value = false;
     console.log(error.message);
     errorMessage.value = "Data loading failed";
-  }
-  if (characters.value.length) {
-    isDataLoaded.value = true;
-    console.log("All characters are loaded.");
   }
 }
 
@@ -168,6 +172,7 @@ async function toPrevPage() {
 }
 .search_results__item {
   all: unset;
+  /* relative для after */
   position: relative;
   padding: 10px 16px 8px;
   text-decoration: none;
