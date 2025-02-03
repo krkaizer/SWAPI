@@ -64,8 +64,9 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 // для получения функции от родителя
 import { defineProps } from "vue";
+
 const props = defineProps<{
-  selectCharacter: (character: any[] | null) => void;
+  selectCharacter: (character: any) => void;
 }>();
 
 // уточнить по поводу типа
@@ -90,9 +91,10 @@ async function getCharacters(url: string | null = null) {
     nextPage.value = response.data.next;
     prevPage.value = response.data.previous;
     characters.value = response.data.results;
+    //запрос мб пустым, но данные загружены, поэтому вне цикла
     isDataLoaded.value = true;
     if (characters.value.length) {
-      console.log("All characters are loaded.");
+      console.log("Characters are loaded.");
     }
   } catch (error: any) {
     isDataLoaded.value = false;

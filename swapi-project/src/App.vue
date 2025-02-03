@@ -24,9 +24,10 @@ import { ref } from "vue";
 import CharacterList from "./components/CharacterList.vue";
 import CharacterDetail from "./components/CharacterDetail.vue";
 
-const selectedCharacter = ref<any[] | null>(null);
+const selectedCharacter = ref<any>(null);
 // эту функцию передаю детям
-function selectCharacter(character: any[] | null) {
+// получает объект персонажа - указать тип и у детей
+function selectCharacter(character: any) {
   selectedCharacter.value = character;
 }
 </script>
@@ -57,6 +58,10 @@ h6 {
 }
 button {
   font-family: inherit;
+}
+a {
+  all: unset;
+  cursor: pointer;
 }
 * {
   margin: 0;

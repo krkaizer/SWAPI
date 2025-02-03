@@ -21,36 +21,71 @@
     </button>
     <h3 class="header__character_name">{{ character.name }}</h3>
   </div>
-  <div v-if="!isDataLoaded" class="loading">Loading...</div>
-  <div v-if="isDataLoaded" class="character_info">
-    <h4
-      v-if="characterHomeworld !== 'unknown'"
-      class="character_info__item character_info__homeworld"
-    >
-      from {{ characterHomeworld }}
-    </h4>
-    <h4 v-else class="character_info__item character_info__homeworld">
-      homeworld is unknown
-    </h4>
 
-    <div class="info__general">
-      <p class="character_info__item">
-        Birth year:
-        {{ character.birth_year }}
-      </p>
-      <p class="character_info__item">Gender: {{ character.gender }}</p>
-
-      <p v-if="character.mass !== 'unknown'" class="character_info__item">
-        Mass: {{ character.mass }} kg
-      </p>
-      <p v-else class="character_info__item">Mass: {{ character.mass }}</p>
-
-      <p v-if="character.height !== 'unknown'" class="character_info__item">
-        Height: {{ character.height }} cm
-      </p>
-      <p v-else class="character_info__item">Height: {{ character.height }}</p>
-    </div>
+  <div v-if="errorMessageHomeworld || errorMessageMovies" class="error">
+    {{ errorMessageHomeworld }} {{ errorMessageMovies }}
   </div>
+  <div
+    v-if="
+      (!isHomeworldLoaded || !isMoviesLoaded) &&
+      !errorMessageHomeworld &&
+      !errorMessageMovies
+    "
+    class="loading"
+  >
+    Loading...
+  </div>
+  <Transition>
+    <div
+      v-if="
+        isHomeworldLoaded &&
+        isMoviesLoaded &&
+        !errorMessageHomeworld &&
+        !errorMessageMovies
+      "
+      class="character_info"
+    >
+      <h4
+        v-if="characterHomeworld !== 'unknown'"
+        class="character_info__homeworld"
+      >
+        from {{ characterHomeworld }}
+      </h4>
+      <h4 v-else class="character_info__homeworld">homeworld is unknown</h4>
+
+      <div class="info__general">
+        <p class="character_info__item">
+          Birth year:
+          {{ character.birth_year }}
+        </p>
+        <p class="character_info__item">Gender: {{ character.gender }}</p>
+
+        <p v-if="character.mass !== 'unknown'" class="character_info__item">
+          Mass: {{ character.mass }} kg
+        </p>
+        <p v-else class="character_info__item">Mass: {{ character.mass }}</p>
+
+        <p v-if="character.height !== 'unknown'" class="character_info__item">
+          Height: {{ character.height }} cm
+        </p>
+        <p v-else class="character_info__item">
+          Height: {{ character.height }}
+        </p>
+      </div>
+      <div class="info__movies">
+        <h4 class="movies__header">Movies:</h4>
+        <!-- <p>{{ characterMoviesString }}</p> -->
+        <ul class="movies__list">
+          <li v-for="(movie, index) in moviesInfo" :key="movie.title">
+            <a class="movies__item" :href="movie.url" target="_blank"
+              >"{{ movie.title }}"</a
+            >
+            <span v-if="index !== moviesInfo.length - 1">,&nbsp;</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -59,29 +94,61 @@ import { defineProps } from "vue";
 import axios from "axios";
 
 const props = defineProps<{
-  selectCharacter: (character: any[] | null) => void;
-  selectedCharacter: any[] | null;
+  selectCharacter: (character: any) => void;
+  selectedCharacter: any;
 }>();
+
 const character = ref<any>(props.selectedCharacter);
 const characterHomeworld = ref<string>("");
-const errorMessage = ref<string>("");
-const isDataLoaded = ref<boolean>(false);
+const errorMessageHomeworld = ref<string>("");
+const isHomeworldLoaded = ref<boolean>(false);
 
 async function getHomeworld() {
   try {
+    console.log(character.value.homeworld);
     const response = await axios.get(character.value.homeworld);
     characterHomeworld.value = response.data.name;
+    isHomeworldLoaded.value = true;
+    if (characterHomeworld.value) {
+      console.log("Homeworld is loaded.");
+    }
   } catch (error: any) {
+    isHomeworldLoaded.value = false;
     console.log(error.message);
-    errorMessage.value = "Homeworld loading failed";
+    errorMessageHomeworld.value = "Homeworld loading failed.";
   }
-  if (characterHomeworld.value) {
-    isDataLoaded.value = true;
-  }
+  // test
+  // errorMessageHomeworld.value = "Homeworld loading failed.";
 }
 
+const moviesInfo = ref<any[]>([]);
+const isMoviesLoaded = ref<boolean>(false);
+const errorMessageMovies = ref<string>("");
+
+async function getMovies() {
+  let movieUrls = character.value.films;
+  try {
+    // возвращает массив результатов промисов
+    const responses = await Promise.all(
+      movieUrls.map((url: string) => axios.get(url))
+    );
+    // for a
+    moviesInfo.value = responses.map((response) => response.data);
+    isMoviesLoaded.value = true;
+    if (moviesInfo.value) {
+      console.log("Movies info is loaded.");
+    }
+  } catch (error: any) {
+    isMoviesLoaded.value = false;
+    console.log(error.message);
+    errorMessageMovies.value = "Films loading failed";
+  }
+  // test
+  // errorMessageMovies.value = "Movies loading failed.";
+}
 onMounted(() => {
   getHomeworld();
+  getMovies();
 });
 </script>
 
@@ -106,6 +173,18 @@ onMounted(() => {
 }
 .character_info {
 }
+@media only screen and (min-width: 775px) {
+  .character_info {
+    margin: 0 auto;
+    width: 80%;
+  }
+}
+@media only screen and (min-width: 1320px) {
+  .character_info {
+    margin: 0 auto;
+    width: 70%;
+  }
+}
 .character_info__item {
 }
 .character_info__homeworld {
@@ -125,16 +204,26 @@ onMounted(() => {
   border: 1px solid var(--color-white);
   border-radius: 12px;
 }
+.info__movies {
+  padding: 12px;
+}
 @media only screen and (min-width: 775px) {
-  .info__general {
-    margin: 0 auto;
-    width: 80%;
+  .info__movies {
+    padding-top: 16px;
   }
 }
-@media only screen and (min-width: 1320px) {
-  .info__general {
-    margin: 0 auto;
-    width: 70%;
-  }
+.movies__header {
+  margin-bottom: 8px;
+}
+.movies__list {
+  list-style: none;
+}
+.movies__list li {
+  display: inline;
+}
+.movies__item {
+}
+.movies__item:hover {
+  text-decoration: underline;
 }
 </style>
