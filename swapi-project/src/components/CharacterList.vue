@@ -64,13 +64,13 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 // для получения функции от родителя
 import { defineProps } from "vue";
+import { Character } from "@/types";
 
 const props = defineProps<{
-  selectCharacter: (character: any) => void;
+  selectCharacter: (character: Character | null) => void;
 }>();
 
-// уточнить по поводу типа
-const characters = ref<any[]>([]);
+const characters = ref<Character[]>([]);
 const searchQuery = ref<string>(""); //поисковой запрос
 const nextPage = ref<string | null>(null);
 const prevPage = ref<string | null>(null);
@@ -91,6 +91,7 @@ async function getCharacters(url: string | null = null) {
     nextPage.value = response.data.next;
     prevPage.value = response.data.previous;
     characters.value = response.data.results;
+    console.log(characters.value);
     //запрос мб пустым, но данные загружены, поэтому вне цикла
     isDataLoaded.value = true;
     if (characters.value.length) {

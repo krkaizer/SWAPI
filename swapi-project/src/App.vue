@@ -23,11 +23,12 @@
 import { ref } from "vue";
 import CharacterList from "./components/CharacterList.vue";
 import CharacterDetail from "./components/CharacterDetail.vue";
+import { Character } from "./types";
 
-const selectedCharacter = ref<any>(null);
+const selectedCharacter = ref<Character | null>(null);
 // эту функцию передаю детям
 // получает объект персонажа - указать тип и у детей
-function selectCharacter(character: any) {
+function selectCharacter(character: Character | null) {
   selectedCharacter.value = character;
 }
 </script>

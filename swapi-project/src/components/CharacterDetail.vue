@@ -89,16 +89,18 @@
 </template>
 
 <script setup lang="ts">
+import axios from "axios";
 import { ref, onMounted } from "vue";
 import { defineProps } from "vue";
-import axios from "axios";
+import { Character, Movie } from "@/types";
 
 const props = defineProps<{
-  selectCharacter: (character: any) => void;
-  selectedCharacter: any;
+  selectCharacter: (character: Character | null) => void;
+  // персонаж всегда будет выбран, поэтому без null
+  selectedCharacter: Character;
 }>();
 
-const character = ref<any>(props.selectedCharacter);
+const character = ref<Character>(props.selectedCharacter);
 const characterHomeworld = ref<string>("");
 const errorMessageHomeworld = ref<string>("");
 const isHomeworldLoaded = ref<boolean>(false);
@@ -121,7 +123,7 @@ async function getHomeworld() {
   // errorMessageHomeworld.value = "Homeworld loading failed.";
 }
 
-const moviesInfo = ref<any[]>([]);
+const moviesInfo = ref<Movie[]>([]);
 const isMoviesLoaded = ref<boolean>(false);
 const errorMessageMovies = ref<string>("");
 
@@ -129,9 +131,7 @@ async function getMovies() {
   let movieUrls = character.value.films;
   try {
     // возвращает массив результатов промисов
-    const responses = await Promise.all(
-      movieUrls.map((url: string) => axios.get(url))
-    );
+    const responses = await Promise.all(movieUrls.map((url) => axios.get(url)));
     // for a
     moviesInfo.value = responses.map((response) => response.data);
     isMoviesLoaded.value = true;
@@ -146,6 +146,7 @@ async function getMovies() {
   // test
   // errorMessageMovies.value = "Movies loading failed.";
 }
+
 onMounted(() => {
   getHomeworld();
   getMovies();
