@@ -26,7 +26,8 @@
           :data-gender="item.gender"
           @click="props.selectCharacter(item)"
         >
-          {{ item.name }}
+          <span v-html="getBoldText(item.name)"></span>
+          <!-- {{ item.name }} -->
         </button>
       </li>
     </TransitionGroup>
@@ -102,6 +103,12 @@ async function getCharacters(url: string | null = null) {
   // test
   // isDataLoaded.value = false;
   // errorMessage.value = "test";
+}
+
+function getBoldText(text: string) {
+  if (!searchQuery.value) return text;
+  const regex = new RegExp(`(${searchQuery.value})`, "gi");
+  return text.replace(regex, `<strong>$1</strong>`);
 }
 
 // при монтировании выводим всех персонажей
