@@ -5,12 +5,11 @@
     <input
       class="search_bar__input"
       type="search"
-      name=""
-      id=""
       placeholder="Enter character name..."
       v-model="searchQuery"
-      @input="getCharacters()"
+      ref="searchInput"
     />
+    <!-- @input="getCharacters()" -->
   </div>
 
   <div class="error" v-if="errorMessage">
@@ -62,8 +61,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
-// для получения функции от родителя
-import { defineProps } from "vue";
+import { useDebounceFn, useEventListener } from "@vueuse/core"; // для debounce в input
+import { defineProps } from "vue"; // для получения функции/переменной от родителя
 import { Character } from "@/types";
 
 const props = defineProps<{
@@ -80,9 +79,9 @@ const isDataLoaded = ref<boolean>(false); //проверка загружены 
 // null может быть при передаче ссылки на несуществующую next или prev
 async function getCharacters(url: string | null = null) {
   errorMessage.value = "";
-  isDataLoaded.value = false;
-  // очищаем предыдущий запрос
+  // очищаем предыдущий запрос, чтобы загрузка не отображалась над элементами
   characters.value = [];
+  isDataLoaded.value = false;
   try {
     // без await вернёт промис
     const response = await axios.get(
@@ -108,6 +107,12 @@ async function getCharacters(url: string | null = null) {
 onMounted(() => {
   getCharacters();
 });
+
+// хранит ссылку на элемент
+const searchInput = ref<HTMLInputElement | null>(null);
+const debouncedGetCharacters = useDebounceFn(() => getCharacters(), 500);
+// отслеживание изменений в input (элемент через ref, тип события, функция)
+useEventListener(searchInput, "input", debouncedGetCharacters);
 
 // функции для кнопок навигации
 async function toNextPage() {
