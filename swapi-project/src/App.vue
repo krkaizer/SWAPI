@@ -130,29 +130,6 @@ body {
   color: red;
   font-weight: bold;
 }
-.loading {
-  padding-top: 24px;
-  color: var(--color-light-gray);
-  /* text-align: center; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  /* чтобы текст был посередине */
-  padding-right: 15px;
-}
-.loading svg {
-  animation: rotate 2s linear infinite;
-}
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(350deg);
-  }
-}
-
 /* transition */
 .v-enter-from,
 .v-leave-to {
