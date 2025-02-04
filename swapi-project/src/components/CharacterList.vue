@@ -19,7 +19,7 @@
   <div class="search_results" v-if="!errorMessage">
     <div v-if="!isDataLoaded" class="loading">Loading...</div>
     <!-- <ul class="search_results__list"> -->
-    <TransitionGroup tag="ul" class="search_results__list" name="list">
+    <TransitionGroup v-else tag="ul" class="search_results__list" name="list">
       <li v-for="item in characters" :key="item.name">
         <button
           class="search_results__item"
